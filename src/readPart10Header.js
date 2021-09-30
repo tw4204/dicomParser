@@ -27,7 +27,13 @@ export default function readPart10Header (byteArray, options) {
     const prefix = littleEndianByteStream.readFixedString(4);
 
     if (prefix !== 'DICM') {
-      throw 'dicomParser.readPart10Header: DICM prefix not found at location 132 - this is not a valid DICOM P10 file.';
+      const warningMessage = 'dicomParser.readPart10Header: DICM prefix not found at location 132 - this is not a valid DICOM P10 file.';
+      if (options.force) {
+        littleEndianByteStream.seek(0);
+        console.warn(warningMessage);
+      } else {
+        throw warningMessage;
+      }
     }
   }
 
